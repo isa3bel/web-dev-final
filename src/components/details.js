@@ -1,11 +1,12 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import DetailRow from "./detailRow"
 class Details extends React.Component {
   constructor() {
     super();
     this.state = {
-      items2: [],
+      items2: []
     };
   }
 
@@ -39,20 +40,26 @@ class Details extends React.Component {
           crossorigin="anonymous"
         />
         <h1>{this.props.header}</h1>
-        <Button variant="primary" onClick={() => this.props.history.push(`/${this.props.userId}/domain`)}>Back</Button>
+        <Button
+          variant="primary"
+          onClick={() =>
+            this.props.history.push(`/${this.props.userId}/domain`)
+          }
+        >
+          Back
+        </Button>
         <ul class="list-group">
-          {this.state.items2.map((item) => {
-            return (
-              <div>
-                <li class="list-group-item row d-flex justify-content-between">
-                <Link class="col" to={`/${this.props.userId}/${this.props.header}/${item._id}/list`} >this needs to change</Link> 
-                  <Button class="col" variant="warning">Edit</Button>
-                </li>
-              </div>
-            );
-          })}
+          {this.state.items2.map((item) => 
+            <DetailRow item={item} userId={this.props.userId} header={this.props.header}/>
+          )}
         </ul>
-        <Button onClick={() => {this.addDomain()}}>Add {this.props.header}</Button>
+        <Button
+          onClick={() => {
+            this.addDomain();
+          }}
+        >
+          Add {this.props.header}
+        </Button>
       </div>
     );
   }
