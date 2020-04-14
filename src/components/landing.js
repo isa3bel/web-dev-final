@@ -1,13 +1,14 @@
 import React from "react";
 import { Button, InputGroup, FormControl, Row } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import DomainRow from "./domainRow";
 class Landing extends React.Component {
   constructor() {
     super();
     this.state = {
       items: [],
       domainName: "",
-      domains: []
+      domains: [],
     };
   }
 
@@ -39,28 +40,33 @@ class Landing extends React.Component {
         </Button>
         <ul class="list-group">
           {this.state.items.map((item) => {
-            return (
-              <div>
-                <li class="list-group-item row d-flex justify-content-between">
-                  <Link class="col" to={`/${this.props.userId}/domain/${item}`}>
-                    {item}
-                  </Link>
-                  <Button class="col" variant="warning">
-                    Edit
-                  </Button>
-                </li>
-              </div>
-            );
+            return <DomainRow item={item} userId={this.props.userId} />;
           })}
-          <li class="list-group-item row">
-            <FormControl class="col"
-              onChange={(e) =>
-                this.updateNameForm({
-                  domainName: e.target.value,
-                })
-              }
-            />
-            <Button class="col" onClick={() => this.props.history.push(`/${this.props.userId}/domains/${this.state.domainName}`)}>Add domain</Button>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-10">
+                <input
+                  class="form-control"
+                  onChange={(e) =>
+                    this.updateNameForm({
+                      domainName: e.target.value,
+                    })
+                  }
+                ></input>
+              </div>
+              <div class="col-2">
+                <button
+                  class="btn btn-primary btn-block"
+                  onClick={() =>
+                    this.props.history.push(
+                      `/${this.props.userId}/domains/${this.state.domainName}`
+                    )
+                  }
+                >
+                  Add Domain
+                </button>
+              </div>
+            </div>
           </li>
         </ul>
       </div>

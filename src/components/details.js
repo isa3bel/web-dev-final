@@ -23,6 +23,7 @@ class Details extends React.Component {
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.header}`,
       {
         method: "POST",
+        body: '{}',
         headers: {
           "content-type": "application/json",
         },

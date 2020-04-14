@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import DomainRow from "./domainRow";
 
 class Domain extends React.Component {
   constructor() {
@@ -16,6 +17,7 @@ class Domain extends React.Component {
     )
       .then((response) => response.json())
       .then((items) => this.setState({ domains: items }));
+      
   }
 
   addDomain() {
@@ -50,23 +52,18 @@ class Domain extends React.Component {
         <ul class="list-group">
           {this.state.domains.map((item) => {
             return (
-              <div>
-                <li class="list-group-item row d-flex justify-content-between">
-                  <Link
-                    class="col"
-                    to={`/${this.props.userId}/${item}/${item._id}/list`}
-                  >
-                    {item._domain}
-                  </Link>
-                  <Button class="col" variant="warning">
-                    Edit
-                  </Button>
-                </li>
-              </div>
+                <DomainRow userId={this.props.userId} item={item}/>
             );
           })}
         </ul>
-        <Button onClick={() => {this.addDomain()}}>Add {this.props.domainName}</Button>
+        <button
+        class="btn btn-primary btn-clock"
+          onClick={() => {
+            this.addDomain();
+          }}
+        >
+          Add {this.props.domainName}
+        </button>
       </div>
     );
   }

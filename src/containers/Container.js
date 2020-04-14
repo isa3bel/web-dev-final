@@ -53,6 +53,18 @@ class Container extends React.Component {
             )}
           ></Route>
           <Route
+            path="/:userId/:header/list"
+            exact={true}
+            render={(props) => (
+              <Details
+                {...props}
+                userId={props.match.params.userId}
+                header={props.match.params.header}
+                itemId={props.match.params.itemId}
+              />
+            )}
+          ></Route>
+          <Route
             path="/:userId/:header/:itemId/list"
             exact={true}
             render={(props) => (
