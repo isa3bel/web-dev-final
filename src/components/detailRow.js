@@ -10,29 +10,51 @@ class DetailRow extends React.Component {
       newField: "",
       newFieldValue: "",
       items: [],
+      fields2: [],
     };
   }
 
-  
-
+  componentDidMount() {
+    this.getAllFields();
+  }
   isEditing() {
     this.setState({ editing: !this.state.editing });
   }
 
-  clickedSave() {
+  clickedSave(item) {
     this.setState({ editing: !this.state.editing });
+    if(this.state.newField && this.state.newField !== '') {
+      this.props.item[this.state.newField] = this.state.newFieldValue;
+    }
+    this.state.newField = '';
+    this.state.newfieldValue = '';
     fetch(
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.header}/${this.props.item._id}`,
       {
         method: "PUT",
-        body: JSON.stringify({
-          [this.state.newField]: this.state.newFieldValue,
-        }),
+        body: JSON.stringify(this.props.item),
         headers: {
           "content-type": "application/json",
         },
       }
     ).then((response) => response.json());
+  }
+
+  getAllFields() {
+    // this.state.fields2.length = 0;
+    // for (var key in this.props.item) {
+    //   if (this.props.item.hasOwnProperty(key)) {
+    //     if (!key.startsWith("_", 0)) {
+    //       this.state.fields2.push(this.props.item[key]);
+    //     }
+    //   }
+    // }
+
+    const arrayOfFields = Object.keys(this.props.item).filter(
+      (field) => !field.startsWith("_")
+    );
+    console.log(arrayOfFields);
+    return arrayOfFields;
   }
 
   clickedDelete() {
@@ -63,34 +85,42 @@ class DetailRow extends React.Component {
 
       <li class="list-group-item" key={this.props.item._id}>
         <div class="row">
-          {!this.state.editing && (
-            <div class="col">
-              <span>
-                <Link
-                  class="col"
-                  to={`/${this.props.userId}/${this.props.header}/${this.props.item._id}/list`}
-                >
-                  {this.props.item.title}
-                </Link>
-              </span>
-            </div>
-          )}
+          {!this.state.editing &&
+            this.getAllFields().map((item) => (
+              <div class="col">
+                <span>
+                  <Link
+                    class="col"
+                    to={`/${this.props.userId}/${this.props.header}/${this.props.item._id}/list`}
+                  >
+                    {this.props.item[item]}
+                  </Link>
+                </span>
+              </div>
+            ))}
           {this.state.editing && (
             <div class="col-10">
               <ul class="list-group">
                 <li class="list-group-item">
-                  <div class="form-group row">
-                    <label class="col-sm-2" for="inputPassword">
-                      Field here needs to change
-                    </label>
-                    <div class="col-sm-10">
-                      <input
-                        class="form-control"
-                        id="inputPassword"
-                        type="text"
-                      />
-                    </div>
-                  </div>
+                  {Object.keys(this.props.item)
+                    .filter((field) => !field.startsWith("_"))
+                    .map((item) => (
+                      <div class="form-group row">
+                        <label
+                          class="col-sm-2 col-form-label"
+                          for="inputPassword"
+                        >
+                          {item}
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            id="inputPassword"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    ))}
                 </li>
                 <li class="list-group-item">
                   <div class="form-group row">
@@ -144,7 +174,7 @@ class DetailRow extends React.Component {
               {this.state.editing && (
                 <button
                   class="btn btn-success btn-block float-right"
-                  onClick={() => this.clickedSave()}
+                  onClick={() => this.clickedSave(this.props.item)}
                 >
                   Save
                 </button>
