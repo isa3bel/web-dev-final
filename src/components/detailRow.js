@@ -11,6 +11,7 @@ class DetailRow extends React.Component {
       newFieldValue: "",
       items: [],
       fields2: [],
+      existingField: "",
     };
   }
 
@@ -21,13 +22,15 @@ class DetailRow extends React.Component {
     this.setState({ editing: !this.state.editing });
   }
 
-  clickedSave(item) {
+  clickedSave() {
     this.setState({ editing: !this.state.editing });
-    if(this.state.newField && this.state.newField !== '') {
+    //console.log(this.state.existingField);
+    if (this.state.newField && this.state.newField !== "") {
       this.props.item[this.state.newField] = this.state.newFieldValue;
     }
-    this.state.newField = '';
-    this.state.newfieldValue = '';
+    console.log(this.props.item);
+    this.state.newField = "";
+    this.state.newfieldValue = "";
     fetch(
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.header}/${this.props.item._id}`,
       {
@@ -40,20 +43,14 @@ class DetailRow extends React.Component {
     ).then((response) => response.json());
   }
 
-  getAllFields() {
-    // this.state.fields2.length = 0;
-    // for (var key in this.props.item) {
-    //   if (this.props.item.hasOwnProperty(key)) {
-    //     if (!key.startsWith("_", 0)) {
-    //       this.state.fields2.push(this.props.item[key]);
-    //     }
-    //   }
-    // }
+  change = (e) => {
+    this.props.item[e.target.name] = e.target.value;
+  };
 
+  getAllFields() {
     const arrayOfFields = Object.keys(this.props.item).filter(
       (field) => !field.startsWith("_")
     );
-    console.log(arrayOfFields);
     return arrayOfFields;
   }
 
@@ -72,17 +69,6 @@ class DetailRow extends React.Component {
 
   render() {
     return (
-      // <div>
-      //   {this.state.items.length !== 0 &&
-      //     this.state.items.map((i) => (
-      //       <li class="list-group-item">
-      //         <div class="row">
-
-      //         </div>
-      //       </li>
-      //     ))}
-      // </div>
-
       <li class="list-group-item" key={this.props.item._id}>
         <div class="row">
           {!this.state.editing &&
@@ -93,7 +79,7 @@ class DetailRow extends React.Component {
                     class="col"
                     to={`/${this.props.userId}/${this.props.header}/${this.props.item._id}/list`}
                   >
-                    {this.props.item[item]}
+                    {this.props.item[item] + ""}
                   </Link>
                 </span>
               </div>
@@ -114,6 +100,9 @@ class DetailRow extends React.Component {
                         </label>
                         <div class="col-sm-10">
                           <input
+                            onChange={this.change}
+                            name={item}
+                            defaultValue={this.props.item[item]}
                             class="form-control"
                             id="inputPassword"
                             type="text"
@@ -174,46 +163,13 @@ class DetailRow extends React.Component {
               {this.state.editing && (
                 <button
                   class="btn btn-success btn-block float-right"
-                  onClick={() => this.clickedSave(this.props.item)}
+                  onClick={() => this.clickedSave()}
                 >
                   Save
                 </button>
               )}
             </span>
           </div>
-
-          {/* (
-          <div class="col d-flex justify-content-around">
-            <FormControl
-              placeholder="New Field"
-              onChange={(e) =>
-                this.updateForm({
-                  newField: e.target.value,
-                })
-              }
-            />
-            <FormControl
-              placeholder="New FieldValue"
-              onChange={(e) =>
-                this.updateForm({
-                  newFieldValue: e.target.value,
-                })
-              }
-            />
-            <div>
-              <Button variant="danger" class="row" onClick={() => this.clickedDelete()}>
-                Delete
-              </Button>
-              <Button
-                variant="success"
-                class="row"
-                onClick={() => this.clickedSave()}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-            )*/}
         </div>
       </li>
     );
