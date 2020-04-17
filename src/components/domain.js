@@ -16,8 +16,7 @@ class Domain extends React.Component {
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.domainName}`
     )
       .then((response) => response.json())
-      .then((items) => this.setState({ domains: items }));
-      
+      .then((items) => (this.state.domains = items));
   }
 
   addDomain() {
@@ -25,11 +24,12 @@ class Domain extends React.Component {
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.domainName}`,
       {
         method: "POST",
+        body: "{}",
         headers: {
           "content-type": "application/json",
         },
       }
-    ).then((response) => response.json());
+    ).then((response) => response.json()).then((items) => this.state.domains.push(items));
   }
 
   render() {
@@ -50,14 +50,13 @@ class Domain extends React.Component {
           Back
         </Button>
         <ul class="list-group">
-          {this.state.domains.map((item) => {
-            return (
-                <DomainRow userId={this.props.userId} item={item}/>
-            );
-          })}
+          {this.state.domains.length !== 0 &&
+            this.state.domains.map((item) => {
+              return <DomainRow userId={this.props.userId} item={item} />;
+            })}
         </ul>
         <button
-        class="btn btn-primary btn-clock"
+          class="btn btn-primary btn-clock"
           onClick={() => {
             this.addDomain();
           }}

@@ -135,7 +135,7 @@ class DomainRow extends React.Component {
             </div>
             <div class="col-4">
               <button
-                class="btn btn-success float-right" /*onClick={() => this.addField()}*/
+                class="btn btn-success float-right"
               >
                 Add
               </button>
