@@ -44,7 +44,14 @@ class DomainRow extends React.Component {
       .then((schema) => console.log(schema));
   }
 
-  clickedDelete() {}
+  clickedDelete() {
+    fetch(
+      `http://wbdv-generic-server.herokuapp.com/schemas/${this.props.userId}/${this.props.item}`,
+      {
+        method: "DELETE",
+      }
+    ).then((response) => response.json());
+  }
 
   updateForm(newState) {
     this.setState(newState);
@@ -56,7 +63,7 @@ class DomainRow extends React.Component {
     )
       .then((response) => response.json())
       .then((status) => this.setState({ schema: status }));
-  }
+  };
 
   render() {
     return (
@@ -74,7 +81,7 @@ class DomainRow extends React.Component {
                 class="col"
                 to={`/${this.props.userId}/${this.props.item}/list`}
               >
-                {this.props.item}
+                {this.props.item} {/*this is the problem here*/}
               </Link>
             </div>
             <div class="col-4">
@@ -98,14 +105,24 @@ class DomainRow extends React.Component {
               <input id="collection-name" class="form-control" />
             </div>
             <div class="col-4">
-              <button class="btn btn-danger float-right">Delete</button>
+              <button
+                class="btn btn-danger float-right"
+                onClick={() => this.clickedDelete()}
+              >
+                Delete
+              </button>
               <button
                 class="btn btn-success float-right"
                 onClick={() => this.clickedSave(this.props.item)}
               >
                 Save
               </button>
-              <button class="btn btn-info float-right" onClick={() => this.isEditing()}>Cancel</button>
+              <button
+                class="btn btn-info float-right"
+                onClick={() => this.isEditing()}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         )}
@@ -134,11 +151,7 @@ class DomainRow extends React.Component {
               </select>
             </div>
             <div class="col-4">
-              <button
-                class="btn btn-success float-right"
-              >
-                Add
-              </button>
+              <button class="btn btn-success float-right">Add</button>
             </div>
           </div>
         )}

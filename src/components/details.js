@@ -1,12 +1,12 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import DetailRow from "./detailRow"
+import DetailRow from "./detailRow";
 class Details extends React.Component {
   constructor() {
     super();
     this.state = {
-      items2: []
+      items2: [],
     };
   }
 
@@ -23,12 +23,12 @@ class Details extends React.Component {
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.header}`,
       {
         method: "POST",
-        body: '{}',
+        body: "{}",
         headers: {
           "content-type": "application/json",
         },
       }
-    ).then((response) => response.json());
+    ).then((response) => response.json()).then(status => this.setState({items2: this.state.items2.push(status)}));
   }
 
   render() {
@@ -50,9 +50,16 @@ class Details extends React.Component {
           Back
         </Button>
         <ul class="list-group">
-          {this.state.items2.map((item) => 
-            <DetailRow item={item} userId={this.props.userId} header={this.props.header}/>
-          )}
+          {this.state.items2.map((item) => {
+            return (
+              <DetailRow
+                itemId={this.props.itemId}
+                item={item}
+                userId={this.props.userId}
+                header={this.props.header}
+              />
+            );
+          })}
         </ul>
         <Button
           onClick={() => {

@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import DomainRow from "./domainRow";
+import DetailRow from "./detailRow"
 
 class Domain extends React.Component {
   constructor() {
@@ -16,11 +17,11 @@ class Domain extends React.Component {
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.domainName}`
     )
       .then((response) => response.json())
-      .then((items) => (this.state.domains = items));
+      .then((items) => (this.state.domains = items)); // this can and cannot be empty
   }
 
   addDomain() {
-    return fetch(
+    fetch(
       `http://wbdv-generic-server.herokuapp.com/api/${this.props.userId}/${this.props.domainName}`,
       {
         method: "POST",
@@ -29,7 +30,13 @@ class Domain extends React.Component {
           "content-type": "application/json",
         },
       }
-    ).then((response) => response.json()).then((items) => this.state.domains.push(items));
+    )
+      .then((response) => response.json())
+      .then((items) => {
+        
+        console.log("isabel 2" + JSON.stringify(items));
+        this.setState({ domains:this.state.domains.concat([items]) });
+      });
   }
 
   render() {
@@ -52,7 +59,7 @@ class Domain extends React.Component {
         <ul class="list-group">
           {this.state.domains.length !== 0 &&
             this.state.domains.map((item) => {
-              return <DomainRow userId={this.props.userId} item={item} />;
+              return <DetailRow userId={this.props.userId} item={item} />;
             })}
         </ul>
         <button

@@ -40,7 +40,7 @@ class Landing extends React.Component {
         </Button>
         <ul class="list-group">
           {this.state.items.map((item) => {
-            return <DomainRow item={item} userId={this.props.userId} />;
+             return <DomainRow item={item} userId={this.props.userId} />;
           })}
           <li class="list-group-item">
             <div class="row">

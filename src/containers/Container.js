@@ -73,7 +73,7 @@ class Container extends React.Component {
                 userId={props.match.params.userId}
                 header={props.match.params.header}
                 itemId={props.match.params.itemId}
-              />
+              /> // goes here when I click on a specific row in the domain page
             )}
           ></Route>
           <Route
@@ -84,7 +84,7 @@ class Container extends React.Component {
                 {...props}
                 userId={props.match.params.userId}
                 domainName={props.match.params.domainName}
-              />
+              /> //goes here when i click on add domain in landing page
             )}
           ></Route>
         </Router>

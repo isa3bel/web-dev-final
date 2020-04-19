@@ -12,6 +12,7 @@ class DetailRow extends React.Component {
       items: [],
       fields2: [],
       existingField: "",
+      selected: false
     };
   }
 
@@ -69,7 +70,9 @@ class DetailRow extends React.Component {
 
   render() {
     return (
-      <li class="list-group-item" key={this.props.item._id}>
+      <li class="list-group-item" style={{
+        backgroundColor: this.props.item._id === this.props.itemId ? "lightblue" : "white"
+      }} key={this.props.item._id}>
         <div class="row">
           {!this.state.editing &&
             this.getAllFields().map((item) => (
