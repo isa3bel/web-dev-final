@@ -16,6 +16,7 @@ class Details extends React.Component {
     )
       .then((response) => response.json())
       .then((items) => this.setState({ items2: items }));
+     
   }
 
   addDomain() {
@@ -28,9 +29,9 @@ class Details extends React.Component {
           "content-type": "application/json",
         },
       }
-    ).then((response) => response.json()).then(status => this.setState({items2: this.state.items2.push(status)}));
+    ).then((response) => response.json()).then(status => this.setState({items2: this.state.items2.concat([status])}));
   }
-
+  
   render() {
     return (
       <div class="container">
@@ -50,7 +51,7 @@ class Details extends React.Component {
           Back
         </Button>
         <ul class="list-group">
-          {this.state.items2.map((item) => {
+          {this.state.items2 && this.state.items2.length !== 0 && this.state.items2.map((item) => {
             return (
               <DetailRow
                 itemId={this.props.itemId}
